@@ -1,0 +1,5 @@
+name: guardGenerator
+version: '1.0-SNAPSHOT'
+main: org.jesjack.guardGenerator.GuardGenerator
+api-version: '1.21'
+depend: [WorldGuard]
