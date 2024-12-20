@@ -6,11 +6,9 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin
 import com.sk89q.worldguard.protection.managers.RegionManager
 import org.bukkit.Server
 import org.bukkit.World
-import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.JavaPlugin
 import org.jesjack.guardGenerator.controllers.OnInventoryClickController
 import java.util.logging.Logger
@@ -32,13 +30,12 @@ class GuardGenerator : JavaPlugin(), Listener {
         GuardGenerator.logger = logger
         GuardGenerator.server = server
         server.pluginManager.registerEvents(this, this)
-        val plugin = server.pluginManager.getPlugin("WorldGuard")
-        if (plugin == null || plugin !is WorldGuardPlugin) {
-            logger.severe("WorldGuard not found. GuardGenerator will not function.")
-            server.pluginManager.disablePlugin(this)
-            return
-        }
-        worldGuardPlugin = plugin
+        worldGuardPlugin = server.pluginManager.getPlugin("WorldGuard") as? WorldGuardPlugin
+            ?: run {
+                logger.severe("WorldGuard not found. GuardGenerator will not function.")
+                server.pluginManager.disablePlugin(this)
+                return@onEnable
+            }
         logger.info("GuardGenerator enabled.")
     }
 
